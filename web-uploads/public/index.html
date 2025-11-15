@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <title>Penjar vídeos i documents</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { margin: 0; }
+
+    header {
+      background-color: #111827;
+      color: #f9fafb;
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    nav a {
+      color: #e5e7eb;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+    }
+    nav a:hover {
+      background-color: #374151;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 1.5rem auto;
+      padding: 0 1rem 2rem;
+    }
+    section {
+      margin-bottom: 2rem;
+      scroll-margin-top: 5rem;
+    }
+    h1, h2 {
+      margin-bottom: 0.75rem;
+    }
+    p {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+
+    .section-description {
+      color: #4b5563;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
+      margin-bottom: 1rem;
+      border: 1px solid #e5e7eb;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      margin-top: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    input[type="file"] {
+      font-size: 0.9rem;
+    }
+
+    button {
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid #2563eb;
+      background-color: #2563eb;
+      color: #f9fafb;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .status {
+      font-size: 0.85rem;
+      color: #374151;
+      margin-bottom: 0.5rem;
+      min-height: 1rem;
+    }
+
+    ul.file-list {
+      list-style: none;
+      margin-left: 0;
+    }
+    ul.file-list li {
+      margin-bottom: 0.35rem;
+      font-size: 0.9rem;
+    }
+    ul.file-list a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+    ul.file-list a:hover {
+      text-decoration: underline;
+    }
+
+    video {
+      width: 100%;
+      max-width: 400px;
+      margin-top: 0.25rem;
+      border-radius: 0.5rem;
+      background: #000;
+    }
+
+    footer {
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      padding: 1rem 1.5rem;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div>📁 Penjador de fitxers</div>
+      <nav>
+        <ul>
+          <li><a href="#inici">Inici</a></li>
+          <li><a href="#videos">Vídeos</a></li>
+          <li><a href="#documents">Documents</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- INICI -->
+    <section id="inici">
+      <h1>Benvingut/da</h1>
+      <p class="section-description">
+        Aquesta web et permet penjar <strong>vídeos</strong> i <strong>documents</strong> directament des del navegador.
+      </p>
+      <p>
+        Funcionament bàsic:
+      </p>
+      <ul style="margin-left: 1.2rem; margin-top: 0.25rem;">
+        <li>Tries un fitxer al formulari.</li>
+        <li>Premes "Pujar".</li>
+        <li>Es guarda al servidor i surt a la llista de sota.</li>
+      </ul>
+    </section>
+
+    <!-- VÍDEOS -->
+    <section id="videos">
+      <h2>Vídeos</h2>
+      <p class="section-description">
+        Penja vídeos i visualitza la llista de vídeos disponibles.
+      </p>
+
+      <div class="card">
+        <h3>Pujar un vídeo</h3>
+        <form id="videoForm">
+          <input type="file" id="videoFile" name="file" accept="video/*" required>
+          <button type="submit">Pujar vídeo</button>
+        </form>
+        <div id="videoStatus" class="status"></div>
+      </div>
+
+      <div class="card">
+        <h3>Vídeos penjats</h3>
+        <ul id="videoList" class="file-list"></ul>
+      </div>
+    </section>
+
+    <!-- DOCUMENTS -->
+    <section id="documents">
+      <h2>Documents</h2>
+      <p class="section-description">
+        Penja documents (PDF, Word, etc.) i consulta la llista.
+      </p>
+
+      <div class="card">
+        <h3>Pujar un document</h3>
+        <form id="docForm">
+          <input type="file" id="docFile" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt" required>
+          <button type="submit">Pujar document</button>
+        </form>
+        <div id="docStatus" class="status"></div>
+      </div>
+
+      <div class="card">
+        <h3>Documents penjats</h3>
+        <ul id="docList" class="file-list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Web interactiva mínima per penjar fitxers (Node.js + Express + Multer).
+  </footer>
+
+  <script>
+    // Funció helper per penjar fitxers
+    async function uploadFile(url, fileInput, statusElement, onSuccess) {
+      const file = fileInput.files[0];
+      if (!file) {
+        statusElement.textContent = "Selecciona un fitxer primer.";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      statusElement.textContent = "Pujant fitxer...";
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          body: formData
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || "Error en la pujada");
+        }
+
+        const data = await res.json();
+        statusElement.textContent = data.message || "Fitxer pujat correctament";
+
+        if (typeof onSuccess === "function") {
+          onSuccess();
+        }
+      } catch (error) {
+        statusElement.textContent = "Error: " + error.message;
+      }
+    }
+
+    // Carregar llistes de fitxers
+    async function loadFileList(url, listElement, prefixPath, isVideo = false) {
+      listElement.innerHTML = "<li>Carregant...</li>";
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("No s'ha pogut carregar la llista");
+
+        const files = await res.json();
+        if (!Array.isArray(files) || files.length === 0) {
+          listElement.innerHTML = "<li>No hi ha fitxers pujats.</li>";
+          return;
+        }
+
+        listElement.innerHTML = "";
+        files.forEach((filename) => {
+          const li = document.createElement("li");
+          const link = document.createElement("a");
+          link.href = prefixPath + filename;
+          link.textContent = filename;
+          link.target = "_blank";
+
+          li.appendChild(link);
+
+          if (isVideo) {
+            const vid = document.createElement("video");
+            vid.controls = true;
+            vid.src = prefixPath + filename;
+            li.appendChild(document.createElement("br"));
+            li.appendChild(vid);
+          }
+
+          listElement.appendChild(li);
+        });
+      } catch (error) {
+        listElement.innerHTML = "<li>Error carregant la llista.</li>";
+      }
+    }
+
+    // Quan la pàgina carrega
+    document.addEventListener("DOMContentLoaded", () => {
+      const videoForm = document.getElementById("videoForm");
+      const videoFile = document.getElementById("videoFile");
+      const videoStatus = document.getElementById("videoStatus");
+      const videoList = document.getElementById("videoList");
+
+      const docForm = document.getElementById("docForm");
+      const docFile = document.getElementById("docFile");
+      const docStatus = document.getElementById("docStatus");
+      const docList = document.getElementById("docList");
+
+      // Carregar llistes inicials
+      loadFileList("/files/videos", videoList, "/videos/", true);
+      loadFileList("/files/docs", docList, "/docs/");
+
+      // Gestió formulari vídeos
+      videoForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        uploadFile("/upload/video", videoFile, videoStatus, () => {
+          videoFile.value = "";
+          loadFileList("/files/videos", videoList, "/videos/", true);
+        });
+      });
+
+      // Gestió formulari docs
+      docForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        uploadFile("/upload/doc", docFile, docStatus, () => {
+          docFile.value = "";
+          loadFileList("/files/docs", docList, "/docs/");
+        });
+      });
+    });
+  </script>
+</body>
+</html>
